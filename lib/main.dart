@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:poke_flutter/utils/theme_mode.dart';
 import './poke_list_item.dart';
+import './theme_mode_selection_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+  @override
+  MyAppState createState() => MyAppState();
+}
+
+class MyAppState extends State<MyApp> {
+  ThemeMode themeMode = ThemeMode.system;
+
+  @override
+  void initState() {
+    super.initState();
+    loadThemeMode().then((val) => setState(() => themeMode = val));
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeMode mode = ThemeMode.system;
@@ -69,15 +84,39 @@ class PokeList extends StatelessWidget {
   }
 }
 
-class Settings extends StatelessWidget {
+class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
+  @override
+  SettingsState createState() => SettingsState();
+}
+
+class SettingsState extends State<Settings> {
+  ThemeMode _themeMode = ThemeMode.system;
+
+  @override
+  void initState() {
+    super.initState();
+    loadThemeMode().then((value) => setState(() => _themeMode = value));
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: const [
+      children: [
         ListTile(
-          leading: Icon(Icons.lightbulb),
-          title: Text('Dark/Light Mode'),
+          leading: const Icon(Icons.lightbulb),
+          title: const Text('Dark/Light Mode'),
+          onTap: () async {
+            var ret = await Navigator.of(context).push<ThemeMode>(
+              MaterialPageRoute(
+                builder: (context) => ThemeModeSelectionPage(mode: _themeMode),
+              ),
+            );
+            setState(() {
+              _themeMode = ret!;
+            });
+            await saveThemeMode(_themeMode);
+          },
         ),
       ],
     );
