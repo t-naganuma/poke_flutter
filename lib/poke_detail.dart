@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class PokeDetail extends StatelessWidget {
   const PokeDetail({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,8 +15,8 @@ class PokeDetail extends StatelessWidget {
                   padding: const EdgeInsets.all(32),
                   child: Image.network(
                     "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
-                    width: 100,
                     height: 100,
+                    width: 100,
                   ),
                 ),
                 Container(
